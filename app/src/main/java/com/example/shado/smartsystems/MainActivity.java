@@ -1,12 +1,16 @@
 package com.example.shado.smartsystems;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -18,9 +22,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static int REQUEST_ENABLE_BT = 1;
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    String address;
+    String address, direction;
     BluetoothSocket btSocket;
 
+    private Handler mHandler = new Handler();
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnBackward = (Button)findViewById(R.id.btnBackward);
         Button btnLeft = (Button)findViewById(R.id.btnLeft);
         Button btnRight = (Button)findViewById(R.id.btnRight);
+
 
 
         //region Enabling Bluetooth
@@ -65,12 +73,79 @@ public class MainActivity extends AppCompatActivity {
         }
         //endregion
 
-        //region ClickListeners
+        //region TouchListeners
         //------------------------------------------------------------------------------------------
-        btnForward.setOnClickListener(new View.OnClickListener() {
+
+        btnForward.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                DriveForward();
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int action = motionEvent.getAction();
+                if(action == MotionEvent.ACTION_DOWN)
+                {
+                    direction = "forward";
+                    mHandler.removeCallbacks(mUpdateTask);
+                    mHandler.postAtTime(mUpdateTask,SystemClock.uptimeMillis()+100);
+                }
+                else if(action == MotionEvent.ACTION_UP)
+                {
+                    mHandler.removeCallbacks(mUpdateTask);
+                }
+                return false;
+            }
+        });
+
+        btnBackward.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int action = motionEvent.getAction();
+                if(action == MotionEvent.ACTION_DOWN)
+                {
+                    direction = "backward";
+                    mHandler.removeCallbacks(mUpdateTask);
+                    mHandler.postAtTime(mUpdateTask,SystemClock.uptimeMillis()+100);
+                }
+                else if(action == MotionEvent.ACTION_UP)
+                {
+                    mHandler.removeCallbacks(mUpdateTask);
+                }
+                return false;
+            }
+        });
+
+        btnLeft.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int action = motionEvent.getAction();
+                if(action == MotionEvent.ACTION_DOWN)
+                {
+                    direction = "left";
+                    mHandler.removeCallbacks(mUpdateTask);
+                    mHandler.postAtTime(mUpdateTask,SystemClock.uptimeMillis()+100);
+                }
+                else if(action == MotionEvent.ACTION_UP)
+                {
+                    mHandler.removeCallbacks(mUpdateTask);
+
+                }
+                return false;
+            }
+        });
+
+        btnRight.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int action = motionEvent.getAction();
+                if(action == MotionEvent.ACTION_DOWN)
+                {
+                    direction = "right";
+                    mHandler.removeCallbacks(mUpdateTask);
+                    mHandler.postAtTime(mUpdateTask,SystemClock.uptimeMillis()+100);
+                }
+                else if(action == MotionEvent.ACTION_UP)
+                {
+                    mHandler.removeCallbacks(mUpdateTask);
+                }
+                return false;
             }
         });
 
@@ -98,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         //endregion
     }
 
+    //region Drive
     private void DriveForward(){
         try
         {
@@ -141,5 +217,32 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Error","failed");
         }
     }
+    //endregion
+
+    //region RunnableTask
+    private Runnable mUpdateTask = new Runnable() {
+        @Override
+        public void run() {
+            switch (direction){
+                case "forward":
+                    mHandler.postAtTime(this, SystemClock.uptimeMillis() + 100);
+                    DriveForward();
+                    break;
+                case "backward":
+                    mHandler.postAtTime(this, SystemClock.uptimeMillis() + 100);
+                    DriveBackward();
+                    break;
+                case "left":
+                    mHandler.postAtTime(this, SystemClock.uptimeMillis() + 100);
+                    DriveLeft();
+                    break;
+                case "right":
+                    mHandler.postAtTime(this, SystemClock.uptimeMillis() + 100);
+                    DriveRight();
+                    break;
+            }
+        }
+    };
+    //endregion
 }
 
