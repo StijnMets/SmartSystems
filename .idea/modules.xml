@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SmartSystems.iml" filepath="$PROJECT_DIR$/SmartSystems.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SmartSystems.iml" filepath="$PROJECT_DIR$/.idea/SmartSystems.iml" />
+      <module fileurl="file://C:\Users\shado\AndroidStudioProjects\SmartSystems\SmartSystems.iml" filepath="C:\Users\shado\AndroidStudioProjects\SmartSystems\SmartSystems.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\shado\AndroidStudioProjects\SmartSystems\app\app.iml" filepath="C:\Users\shado\AndroidStudioProjects\SmartSystems\app\app.iml" />
     </modules>
   </component>
 </project>

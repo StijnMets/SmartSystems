@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if(action == MotionEvent.ACTION_UP)
                 {
+                    Stop();
                     mHandler.removeCallbacks(mUpdateTask);
                 }
                 return false;
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if(action == MotionEvent.ACTION_UP)
                 {
+                    Stop();
                     mHandler.removeCallbacks(mUpdateTask);
                 }
                 return false;
@@ -124,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if(action == MotionEvent.ACTION_UP)
                 {
+                    Stop();
                     mHandler.removeCallbacks(mUpdateTask);
 
                 }
@@ -143,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if(action == MotionEvent.ACTION_UP)
                 {
+                    Stop();
                     mHandler.removeCallbacks(mUpdateTask);
                 }
                 return false;
@@ -215,6 +219,17 @@ public class MainActivity extends AppCompatActivity {
         catch (IOException e)
         {
             Log.d("Error","failed");
+        }
+    }
+
+    private void Stop(){
+        try
+        {
+            btSocket.getOutputStream().write('4');
+        }
+        catch (IOException e)
+        {
+            Log.d("Error", "failed");
         }
     }
     //endregion
